@@ -12,6 +12,11 @@ export async function dbConnect()
             console.log("Database is connected successfully ");
         });
 
+        // mongoose.connect(process.env.DATABASE_URL, {
+        //     useUnifiedTopology: true,
+        //     useNewUrlParser: true
+        // });
+
         connection.on("error", (Error) =>
         {
             console.log("Make sure that the database is up ");
