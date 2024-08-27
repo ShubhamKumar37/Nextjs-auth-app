@@ -15,7 +15,7 @@ export const mailSender = async (email, body, subject, route, uniqueToken) =>
     try
     {
         const mailOptions = {
-            from: "shubhamkumar2003@gmail.com.ai",
+            from: "shubhamkumar200334@gmail.com.ai",
             to: email,
             subject: subject,
             html: `
