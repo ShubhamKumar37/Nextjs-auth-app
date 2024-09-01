@@ -1,19 +1,16 @@
 import User from "@/models/userModel";
 import { NextResponse } from "next/server";
-import {bcrypt} from "bcrypt";
+import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
 
 
-export async function POST(req)
-{
-    try
-    {
+export async function POST(req) {
+    try {
         const requestBody = await req.json();
-        const {email, password} = requestBody;
+        const { email, password } = requestBody;
 
-        const userExist = await User.findOne({email: email});
-        if(!userExist)
-        {
+        const userExist = await User.findOne({ email: email });
+        if (!userExist) {
             return NextResponse.json(
                 {
                     success: false,
@@ -22,10 +19,8 @@ export async function POST(req)
             );
         }
 
-        const userPassword = userExist.password;
-
-        if(!(await bcrypt.compare(userPassword, password)))
-        {
+        const isPasswordCorrect = await bcrypt.compare(password, userExist.password);
+        if (!isPasswordCorrect) {
             return NextResponse.json(
                 {
                     success: false,
@@ -42,14 +37,14 @@ export async function POST(req)
             email: userExist.email
         };
 
-        const jwtToken = jwt.sign(payLoad, process.env.JWT_SECRET, {expiresIn: '1d'});
+        const jwtToken = jwt.sign(payLoad, process.env.JWT_SECRET, { expiresIn: '1d' });
 
         const res = NextResponse.json(
             {
                 success: true,
-                message: "Loggedin successfully"
+                message: "Loggedin successfully",
             },
-            {status: 200}
+            { status: 200 }
         );
 
         res.cookies.set("token", jwtToken, {
@@ -61,8 +56,7 @@ export async function POST(req)
 
 
     }
-    catch(Error)
-    {
+    catch (Error) {
         return NextResponse.json(
             {
                 success: false,

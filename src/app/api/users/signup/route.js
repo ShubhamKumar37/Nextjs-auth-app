@@ -49,7 +49,7 @@ export async function POST(req) {
         return NextResponse.json({
             success: true,
             message: "User registered successfully",
-            data: updateUser,
+            data: {updateUser, mailResponse},
         });
 
     } catch (error) {

@@ -12,8 +12,9 @@ export async function POST(req)
         const {token} = requestBody;
         console.log(token);
 
-        const userExist = await User.findOne({verifyToken: token, verifyTokenExpiry: {$gt: Date.now()}});
 
+        const userExist = await User.findOne({verifyToken: token});
+        console.log(userExist);
         if(!userExist)
         {
             return NextResponse.json(
@@ -25,6 +26,20 @@ export async function POST(req)
                     status: 404,
                 }
             );
+        }
+        
+        if(userExist.verifyTokenExpiry < Date.now())
+            {
+                
+                return NextResponse.json(
+                    {
+                        success: false,
+                        message: "Verify token has been expired try to regenerate it "
+                    },
+                    {
+                        status: 404,
+                    }
+                );
         }
 
         userExist.verifyToken = undefined;
